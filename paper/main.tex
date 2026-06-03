@@ -60,7 +60,7 @@ SSM-WM结合S4D风格的对角SSM参数化与Mamba风格的门控块结构,
 \begin{center}
 \parbox{\textwidth}{\setlength{\parindent}{1em}
 {\centering\large\textbf{Lightweight State Space World Model for Humanoid Robot State Prediction\\}} \vspace{-1.2mm}
-\begin{center}
+\begingroup\centering
 ZHOU Xin-min$^{1,\,2\dagger}$,~~YU Huan-jie$^{3}$\\[2pt]
 \scriptsize{(1. School of Artificial Intelligence and Advanced Computing, Hunan University of Technology and Business, Changsha Hunan 410205, China;\\
 2. Xiangjiang Laboratory, Changsha Hunan 410205, China;\\
@@ -274,16 +274,12 @@ K[t] = \sum_{n=1}^{N} C_n \cdot \bar{b}_n \cdot \bar{a}_n^t, \quad t = 0, 1, \ld
 
 \subsection{SSM世界模型架构}
 
-本文提出的SSM世界模型(SSM-WM)整体架构如图~1所示.
+本文提出的SSM世界模型(SSM-WM)整体架构如下所述.
 模型主要包含三个模块: 状态-动作编码器、SSM主干网络和状态解码器.
 SSM主干网络采用Mamba\textsuperscript{\cite{8}}风格的门控SSM块结构,
 结合S4D\textsuperscript{\cite{7}}风格的对角SSM参数化, 在世界模型任务中实现了高效的序列建模.
 
-\begin{center}
-\includegraphics[width=0.95\columnwidth]{figures/architecture.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~1~~SSM世界模型架构\\
-Fig.~1~~Architecture of SSM world model}
-\end{center}
+
 
 \textbf{状态-动作编码器.}
 将状态${\bm s}_t$和动作${\bm a}_t$拼接后通过两层全连接网络投影到隐空间:
@@ -353,7 +349,7 @@ K[d, t] = \sum_{n=1}^{N} C_{d,n} \cdot B_{d,n} \cdot \Delta_d \cdot (\Delta_d A_
 训练过程中, 训练损失在前10个epoch快速下降, 随后趋于平稳,
 在第15个epoch后基本收敛(最终训练MSE约为$1.15\times10^{-3}$).
 验证损失与训练损失趋势一致, 未观察到明显过拟合现象,
-表明20个epoch的轮数足以使模型收敛(训练曲线详见图~6).
+表明20个epoch的轮数足以使模型收敛(训练曲线详见图~5).
 
 \subsection{计算复杂度分析}
 
@@ -461,8 +457,7 @@ SSM-WM的FFT卷积操作在GPU上具有良好的并行性, 但在嵌入式平台
 
 实验结果如表~1所示. 序列长度设置为$T=64$, 批大小为64.
 
-\columnbreak
-\begin{center}
+\begingroup\centering
 {\CJKfamily{kai} 表~1~~不同世界模型方法的性能对比($T=64$)\\
 Table~1~~Performance comparison of different world model methods ($T=64$)}\\
 \label{tab:1} \vskip 3pt
@@ -477,7 +472,7 @@ Transformer-WM & 1.50 & 0.025 & 0.935 & 0.62\\
 Mamba-WM & 1.28 & 0.022 & 0.948 & 0.28\\
 SSM-WM(本文) & 2.72 & 0.035 & 0.998 & 0.24\\
 \bottomrule
-\end{tabular}}\end{center}
+\end{tabular}}\par\endgroup
 
 实验结果表明:
 1)~~线性回归模型的MSE(2.50$\times10^{-3}$)显著高于所有神经网络模型($p<0.001$), 验证了非线性建模的必要性;
@@ -522,11 +517,11 @@ $B$ & LSTM-WM & Mamba-WM & SSM-WM \\
 
 2)~~LSTM-WM在$B=1$时推理时间为2.1ms, 与SSM-WM差距较小, 但随批次大小增加而快速增长;
 
-3)~~SSM-WM和Mamba-WM的推理时间随批次大小增长缓慢, 体现了SSM类方法的并行计算优势(如图~2所示).
+3)~~SSM-WM和Mamba-WM的推理时间随批次大小增长缓慢, 体现了SSM类方法的并行计算优势(如图~1所示).
 
 \begin{center}
 \includegraphics[width=0.95\columnwidth]{figures/batch_inference.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~2~~不同批次大小下的推理时间对比\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~1~~不同批次大小下的推理时间对比\\
 Fig.~3~~Inference time comparison under different batch sizes}
 \end{center}
 
@@ -583,11 +578,11 @@ $T$ & SSM-WM & LSTM-WM & SSM-WM & LSTM-WM\\
 \end{tabular}}\par\endgroup
 
 结果表明:
-1)~~SSM-WM的推理时间随序列长度增长缓慢(如图~3所示), 体现了$O(T\log T)$计算复杂度的优势;
+1)~~SSM-WM的推理时间随序列长度增长缓慢(如图~2所示), 体现了$O(T\log T)$计算复杂度的优势;
 
 2)~~LSTM-WM的推理时间随序列长度近似线性增长, 在$T=128$时SSM-WM已实现10倍加速;
 
-3)~~随着序列长度增加, SSM-WM和LSTM-WM的预测精度均有所提升(如图~4所示),
+3)~~随着序列长度增加, SSM-WM和LSTM-WM的预测精度均有所提升(如图~3所示),
 说明更长的历史信息有助于状态预测;
 
 4)~~在$T=512$时, SSM-WM的推理时间仅为12.1ms, 仍接近实时控制要求,
@@ -598,13 +593,13 @@ $T$ & SSM-WM & LSTM-WM & SSM-WM & LSTM-WM\\
 
 \begin{center}
 \includegraphics[width=0.95\columnwidth]{figures/inference_vs_seqlen.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~3~~推理时间随序列长度变化趋势\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~2~~推理时间随序列长度变化趋势\\
 Fig.~4~~Inference time vs. sequence length}
 \end{center}
 
 \begin{center}
 \includegraphics[width=0.95\columnwidth]{figures/mse_vs_seqlen.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~4~~预测MSE随序列长度变化趋势\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~3~~预测MSE随序列长度变化趋势\\
 Fig.~5~~Prediction MSE vs. sequence length}
 \end{center}
 
@@ -644,11 +639,11 @@ $D=256$ & 2.58 & 0.85 & 6.8\\
 
 5)~~隐空间维度$D$对性能影响较大: $D=64$时MSE增加7.7\%($p{=}0.001$, Cohen's $d{=}4.8$, 大效应), $D=256$时MSE降低5.1\%($p{=}0.003$, Cohen's $d{=}3.5$, 大效应);
 
-6)~~综合考虑精度、参数量和推理速度, 默认配置($L=4$, $N=16$, $D=128$)是一个较好的平衡点(消融结果可视化如图~5所示).
+6)~~综合考虑精度、参数量和推理速度, 默认配置($L=4$, $N=16$, $D=128$)是一个较好的平衡点(消融结果可视化如图~4所示).
 
 \begin{center}
 \includegraphics[width=0.95\columnwidth]{figures/ablation_results.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~5~~消融实验结果可视化\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~4~~消融实验结果可视化\\
 Fig.~6~~Ablation study results visualization}
 \end{center}
 
@@ -682,7 +677,7 @@ $\lambda{=}1.0$ & 2.84 & 6.90 & 20\\
 4)~~过大的$\lambda$(=1.0)会损害单步精度(MSE增加4.4\%), 这是因为多步损失的梯度可能干扰单步学习.
 
 \textbf{训练收敛分析.}
-图~6展示了SSM-WM在合成数据集上的训练曲线. 训练MSE在前5个epoch快速下降(从$10.7\times10^{-3}$降至$3.7\times10^{-3}$),
+图~5展示了SSM-WM在合成数据集上的训练曲线. 训练MSE在前5个epoch快速下降(从$10.7\times10^{-3}$降至$3.7\times10^{-3}$),
 随后下降速度放缓, 在第15个epoch后趋于平稳(最终训练MSE约为$2.37\times10^{-3}$).
 验证MSE与训练MSE的变化趋势高度一致, 两者之间的差距始终小于$0.35\times10^{-3}$,
 表明模型未出现明显过拟合. 余弦退火学习率调度在训练后期提供了更精细的参数更新,
@@ -690,7 +685,7 @@ $\lambda{=}1.0$ & 2.84 & 6.90 & 20\\
 
 \begin{center}
 \includegraphics[width=0.95\columnwidth]{figures/training_curves.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~6~~SSM-WM训练曲线(合成数据集)\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~5~~SSM-WM训练曲线(合成数据集)\\
 Fig.~2~~Training curves of SSM-WM (synthetic dataset)}
 \end{center}
 
@@ -719,7 +714,7 @@ SSM-WM-MPC & 0.0043 & 195$\pm$10 & 5.1\\
 
 2)~~SSM-WM-MPC的控制回路时间仅为195ms, 相比LSTM-MPC的1420ms加速约7倍($p<0.001$);
 
-3)~~SSM-WM-MPC可实现5.1Hz的控制频率, 满足大多数机器人运动规划任务的需求(如图~7所示);
+3)~~SSM-WM-MPC可实现5.1Hz的控制频率, 满足大多数机器人运动规划任务的需求(如图~6所示);
 
 4)~~Mamba-MPC与SSM-WM-MPC性能接近(跟踪MSE差异$p=0.62$), 进一步验证了对角SSM在MPC中的有效性.
 
@@ -729,7 +724,7 @@ SSM-WM-MPC & 0.0043 & 195$\pm$10 & 5.1\\
 
 \begin{center}
 \includegraphics[width=0.95\columnwidth]{figures/mpc_comparison.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~7~~MPC控制性能对比\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~6~~MPC控制性能对比\\
 Fig.~7~~MPC control performance comparison}
 \end{center}
 
@@ -768,12 +763,12 @@ SSM-WM(本文) & 0.834 & 0.592 & 9.5\\
 
 5)~~SSM-WM的推理时间(9.5ms)高于LSTM-WM(5.0ms), 但仍在10ms实时控制预算内, 且显著优于Transformer-WM(52.3ms); LSTM在MuJoCo上的推理速度快于SSM-WM, 主要得益于cuDNN对LSTM的高度优化以及MuJoCo高维状态(376维)下FFT卷积的开销增加;
 
-6)~~与合成数据集上的结果相比, MuJoCo数据集上的预测精度普遍较低(各方法多维度性能对比如图~8所示)(R$^2$约为0.6和0.95),
+6)~~与合成数据集上的结果相比, MuJoCo数据集上的预测精度普遍较低(各方法多维度性能对比如图~7所示)(R$^2$约为0.6和0.95),
 这反映了真实物理仿真的复杂性, 也说明SSM-WM在更具挑战性的场景下仍具有竞争力.
 
 \begin{center}
 \includegraphics[width=0.95\columnwidth]{figures/radar_comparison.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~8~~各方法多维度性能雷达图对比\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~7~~各方法多维度性能雷达图对比\\
 Fig.~8~~Multi-dimensional radar chart comparison of different methods}
 \end{center}
 
