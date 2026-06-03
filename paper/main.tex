@@ -606,11 +606,12 @@ $T$ & SSM-WM & LSTM-WM & SSM-WM & LSTM-WM\\
 值得注意的是, SSM-WM在短序列($T=16$)下的预测精度(MSE=9.76$\times10^{-3}$)显著低于LSTM(1.70$\times10^{-3}$),
 表明模型对历史信息长度有较强依赖. 在部署时建议使用$T \geq 32$的历史窗口.
 
-\begingroup\centering
+\noindent\begin{minipage}{\columnwidth}
+\centering
 \includegraphics[width=0.95\columnwidth]{figures/inference_vs_seqlen.pdf}\\
 {\fontsize{8.5pt}{10.6pt}\selectfont 图~2~~推理时间随序列长度变化趋势\\
 Fig.~2~~Inference time vs. sequence length}
-\par\endgroup
+\end{minipage}
 
 \begingroup\centering
 \includegraphics[width=0.95\columnwidth]{figures/mse_vs_seqlen.pdf}\\
@@ -622,9 +623,10 @@ Fig.~3~~Prediction MSE vs. sequence length}
 
 为验证各组件的有效性, 在$T=64$的设置下进行了以下消融实验, 结果如表~5所示.
 
-\begin{center}
-{\CJKfamily{kai} 表~5~~消融实验结果($T=64$)\\
-Table~5~~Ablation study results ($T=64$)}\\
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~5~~消融实验结果($T=64$)}\\
+Table~5~~Ablation study results ($T=64$)\\
 \label{tab:5} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
 \begin{tabular}{@{}lccc@{ }}\toprule
@@ -640,7 +642,9 @@ $N=128$ & 2.66 & 0.28 & 4.2\\
 $D=64$ & 2.93 & 0.08 & 2.1\\
 $D=256$ & 2.58 & 0.85 & 6.8\\
 \bottomrule
-\end{tabular}}\end{center}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
 
 实验结果表明:
 1)~~门控机制对模型性能贡献显著, 去除门控后MSE增加2.2\%($p{=}0.012$, Cohen's $d{=}1.7$, 大效应),
@@ -665,9 +669,10 @@ Fig.~4~~Ablation study results visualization}
 \textbf{训练损失消融.}
 为进一步验证多步展开损失的有效性, 对损失权重$\lambda$和展开步数$H$进行了消融实验(与超参数网格搜索一致), 结果如表~6所示.
 
-\begin{center}
-{\CJKfamily{kai} 表~6~~训练损失消融结果($T=64$)\\
-Table~6~~Training loss ablation results ($T=64$)}\\
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~6~~训练损失消融结果($T=64$)}\\
+Table~6~~Training loss ablation results ($T=64$)\\
 \label{tab:6} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
 \begin{tabular}{@{}lccc@{ }}\toprule
@@ -680,7 +685,9 @@ $\lambda{=}0.5$, $H{=}8$ (默认) & 2.72 & 7.17 & 20\\
 $\lambda{=}0.5$, $H{=}16$ & 2.76 & 7.05 & 20\\
 $\lambda{=}1.0$ & 2.84 & 6.90 & 20\\
 \bottomrule
-\end{tabular}}\end{center}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
 
 结果表明:
 1)~~多步损失对单步预测精度影响较小($\lambda{=}0$时MSE为2.64, 默认为2.72), 但对多步展开精度贡献显著(从9.99降至7.17, 降幅28.2\%);
@@ -710,9 +717,10 @@ Fig.~5~~Training curves of SSM-WM (synthetic dataset)}
 给定一条目标参考轨迹${\bm s}_{\text{ref}}(t)$, 使用MPC控制器驱动机器人跟踪该轨迹.
 MPC的预测时域$H=10$, 使用Adam优化器进行50次梯度下降迭代, 结果如表~7所示.
 
-\begin{center}
-{\CJKfamily{kai} 表~7~~MPC控制性能对比\\
-Table~7~~MPC control performance comparison}\\
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~7~~MPC控制性能对比}\\
+Table~7~~MPC control performance comparison\\
 \label{tab:7} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
 \begin{tabular}{@{}lccc@{ }}\toprule
@@ -722,7 +730,9 @@ LSTM-MPC & 0.0032 & 1420$\pm$45 & 0.7\\
 Mamba-MPC & 0.0041 & 235$\pm$12 & 4.3\\
 SSM-WM-MPC & 0.0043 & 195$\pm$10 & 5.1\\
 \bottomrule
-\end{tabular}}\end{center}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
 
 实验结果表明:
 1)~~SSM-WM-MPC的跟踪精度(0.0043)与LSTM-MPC(0.0032)处于同一数量级, 差距约34\%, 但差异不显著($p=0.12$, 95\%CI: $[-0.0003, 0.0025]$);
@@ -750,9 +760,10 @@ Fig.~6~~MPC control performance comparison}
 该环境的状态维度为376(包含关节角度、角速度、身体姿态等),
 动作维度为17(关节力矩), 包含真实的接触动力学、摩擦力和重力效应, 结果如表~8所示.
 
-\begin{center}
-{\CJKfamily{kai} 表~8~~MuJoCo Humanoid数据集上的性能对比($T=32$)\\
-Table~8~~Performance comparison on MuJoCo Humanoid dataset ($T=32$)}\\
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~8~~MuJoCo Humanoid数据集上的性能对比($T=32$)}\\
+Table~8~~Performance comparison on MuJoCo Humanoid dataset ($T=32$)\\
 \label{tab:8} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
 \begin{tabular}{@{}lccc@{ }}\toprule
@@ -765,7 +776,8 @@ SSM-WM(本文) & 0.834 & 0.592 & 9.5\\
 \bottomrule
 \end{tabular}}\\
 {\fontsize{8pt}{9.6pt}\selectfont 注: 推理时间为中位数$\pm$标准差, 首次运行因CUDA编译导致延迟较高(约19ms).}
-\end{center}
+\par\endgroup
+\end{minipage}
 
 实验结果表明:
 1)~~在MuJoCo Humanoid数据集上, Mamba-WM的预测精度最优(MSE=0.821$\times10^{-3}$), SSM-WM次之(0.834$\times10^{-3}$), 两者均优于LSTM-WM(0.889$\times10^{-3}$)和Transformer-WM(0.956$\times10^{-3}$);
@@ -790,9 +802,10 @@ Fig.~7~~Multi-dimensional radar chart comparison of different methods}
 \textbf{MuJoCo消融实验.}
 为验证SSM-WM各组件在高维非线性场景下的有效性, 在MuJoCo Humanoid数据集上进行了消融实验, 结果如表~9所示.
 
-\begin{center}
-{\CJKfamily{kai} 表~9~~MuJoCo Humanoid数据集上的消融实验($T=32$)\\
-Table~9~~Ablation study on MuJoCo Humanoid dataset ($T=32$)}\\
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~9~~MuJoCo Humanoid数据集上的消融实验($T=32$)}\\
+Table~9~~Ablation study on MuJoCo Humanoid dataset ($T=32$)\\
 \label{tab:9} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
 \begin{tabular}{@{}lccc@{ }}\toprule
@@ -804,7 +817,9 @@ SSM-WM(完整) & 0.834 & 0.592 & 9.5\\
 $L=2$层 & 0.912 & 0.554 & 6.2\\
 $L=6$层 & 0.818 & 0.601 & 12.8\\
 \bottomrule
-\end{tabular}}\end{center}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
 
 结果表明:
 1)~~门控机制在MuJoCo数据集上的贡献更为显著(去除后MSE增加4.6\%, $p<0.01$),
@@ -825,9 +840,10 @@ $L=6$层 & 0.818 & 0.601 & 12.8\\
 Garrote阈值采用非负Garrote函数$\max(0, x - \tau^2/x)$\textsuperscript{\cite{24}}, 产生稀疏但连续的门控信号.
 实验在$T=32$的MuJoCo Humanoid数据集上进行.
 
-\begin{center}
-{\CJKfamily{kai} 表~10~~不同阈值函数的门控机制对比(MuJoCo, $T=32$)\\
-Table~10~~Comparison of different threshold functions for gating mechanism (MuJoCo, $T=32$)}\\
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~10~~不同阈值函数的门控机制对比(MuJoCo, $T=32$)}\\
+Table~10~~Comparison of different threshold functions for gating mechanism (MuJoCo, $T=32$)\\
 \label{tab:10} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
 \begin{tabular}{@{}lccc@{ }}\toprule
@@ -837,7 +853,9 @@ Table~10~~Comparison of different threshold functions for gating mechanism (MuJo
 硬阈值$\mathbb{1}(x>0)$ & 0.891 & 0.564 & 9.2\\
 Garrote阈值 & 0.852 & 0.583 & 9.6\\
 \bottomrule
-\end{tabular}}\end{center}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
 
 结果表明:
 1)~~软阈值的性能最优, 相比硬阈值MSE降低6.4\%($p{=}0.008$, Cohen's $d{=}1.8$, 大效应), 相比Garrote阈值MSE降低2.1\%($p{=}0.042$, Cohen's $d{=}0.7$, 中效应);
