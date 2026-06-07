@@ -542,35 +542,17 @@ $H$ & LSTM-WM & Mamba-WM & \textbf{SSM-WM}\\
 Table~4~~Prediction accuracy of SSM-WM under different sequence lengths ($B{=}64$)}\\
 \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
-\begin{tabular}{@{}lc@{}}\toprule
-\multicolumn{2}{l}{(a) MSE}\\
+\begin{tabular}{@{}lcc@{}}\toprule
+$T$ & MSE$^{\text{a}}$ & 时间$^{\text{b}}$\\
 \midrule
-$T$ & MSE$^{\text{a}}$\\
-\midrule
-16  & 5.04\\
-32  & 1.69\\
-64  & 1.09\\
-128 & 1.34\\
-256 & 1.36\\
-512 & 1.20\\
+16  & 5.04 & 3.7\\
+32  & 1.69 & 3.4\\
+64  & 1.09 & 3.5\\
+128 & 1.34 & 3.4\\
+256 & 1.36 & 3.9\\
+512 & 1.20 & 6.8\\
 \bottomrule
-\end{tabular}
-
-\vskip 3pt
-
-\begin{tabular}{@{}lc@{}}\toprule
-\multicolumn{2}{l}{(b) 推理时间}\\
-\midrule
-$T$ & 时间$^{\text{b}}$\\
-\midrule
-16  & 3.7\\
-32  & 3.4\\
-64  & 3.5\\
-128 & 3.4\\
-256 & 3.9\\
-512 & 6.8\\
-\bottomrule
-\multicolumn{2}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$$\times10^{-3}$; $^{\text{b}}$ms($B{=}64$).}
+\multicolumn{3}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$$\times10^{-3}$; $^{\text{b}}$ms($B{=}64$).}
 \end{tabular}}
 \end{minipage}
 \par\endgroup
