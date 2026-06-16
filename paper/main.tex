@@ -507,29 +507,30 @@ $H$ & LSTM & GRU & Trans. & Mamba & \textbf{S4D-WM}\\
 {\CJKfamily{kai} 表~4~~S4D-WM在不同序列长度下的预测精度($B{=}64$)\\
 Table~4~~Prediction accuracy of S4D-WM under different sequence lengths ($B{=}64$)}\\
 \vskip 3pt
-{\fontsize{8.5pt}{10.6pt}\selectfont
-\begin{tabular}{@{}lcccc@{}}\toprule
-& \multicolumn{2}{c}{Humanoid(348维)} & \multicolumn{2}{c}{Ant(105维)} \\
-\cmidrule(lr){2-3} \cmidrule(lr){4-5}
-$T$ & MSE & $R^2$ & MSE & $R^2$ \\
+{\fontsize{8pt}{10pt}\selectfont
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+& \multicolumn{2}{c}{Humanoid} & \multicolumn{2}{c}{Ant} & \multicolumn{2}{c}{Walker2d} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+$T$ & MSE & $R^2$ & MSE & $R^2$ & MSE$^{\text{c}}$ & $R^2$ \\
 \midrule
-16  & 0.291 & 0.656 & 0.542 & 0.302 \\
-32  & 0.442 & 0.479 & 0.728 & 0.150 \\
-64  & 0.612 & 0.153 & 0.942 & $-$0.019 \\
-128 & 1.213 & $-$0.623 & 0.934 & 0.139 \\
-256 & 2.146 & $-$1.694 & 0.480 & 0.131 \\
+16  & 0.291 & 0.656 & 0.542 & 0.302 & 3.24 & 0.968 \\
+32  & 0.442 & 0.479 & 0.728 & 0.150 & 3.76 & 0.960 \\
+64  & 0.612 & 0.153 & 0.942 & $-$0.019 & 4.02 & 0.957 \\
+128 & 1.213 & $-$0.623 & 0.934 & 0.139 & 4.56 & 0.940 \\
+256 & 2.146 & $-$1.694 & 0.480 & 0.131 & 5.79 & 0.923 \\
 \bottomrule
-\multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $R^2<0$表示预测不如均值基线.}
+\multicolumn{7}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $R^2<0$表示预测不如均值基线; $^{\text{c}}$$\times10^{-2}$.}
 \end{tabular}}
 \end{minipage}
 \par\endgroup
 
 表~4揭示了一个重要发现: 最优序列长度与数据集维度相关.
-Humanoid数据集在$T{=}16$时取得最优MSE(0.291)和$R^2$(0.656), 随$T$增大而快速退化, $T{=}256$时MSE升至2.146, $R^2$降为$-$1.694.
-Ant数据集则在$T{=}256$时取得最优MSE(0.480), 且$R^2$在$T \geq 32$后保持正值为0.13--0.15.
-这一差异的可能原因是: 高维数据的状态转移更复杂, 过长的历史序列引入噪声; 而中低维数据的动力学更规则, 较长的历史有助于捕捉周期性模式.
-推理时间随$T$增大而增加, 但$T \leq 64$时保持在10ms以内.
-综合考虑, 推荐Humanoid使用$T \in [16, 32]$, Ant使用$T \in [128, 256]$(如图~3所示).
+Humanoid数据集在$T{=}16$时取得最优MSE和$R^2$, 随$T$增大而快速退化, $T{=}256$时$R^2$降为负值.
+Ant数据集则在$T{=}256$时取得最优MSE, 且$R^2$在$T \\geq 32$后保持正值.
+Walker2d数据集的趋势与Humanoid一致, $T{=}16$时最优, 随$T$增大而单调退化.
+这一差异的可能原因是: 高维数据的状态转移更复杂, 过长的历史序列引入噪声; 而低维Ant的动力学更规则, 较长的历史有助于捕捉周期性模式.
+综合考虑, 推荐Humanoid和Walker2d使用$T \\in [16, 32]$, Ant使用$T \\in [128, 256]$.
 
 \begingroup\centering
 \includegraphics[width=0.95\columnwidth]{figures/seqlen_sensitivity.pdf}\\
