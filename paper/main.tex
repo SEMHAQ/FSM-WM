@@ -35,15 +35,15 @@ Major Program of Xiangjiang Laboratory (24XJ01001; 25XJ01001).}}
 \begin{center}
 \parbox{\textwidth}{\setlength{\parindent}{1em}
 {\footnotesize {\CJKfamily{hei} 摘要:}
-本文提出了一种基于对角状态空间模型的轻量级世界模型S4D-WM, 用于机器人关节状态预测.
-在D4RL Humanoid数据集上, S4D-WM的预测精度最优, MSE为$24.79{\pm}0.40$、$R^2$为$0.690{\pm}0.005$,
-分别优于LSTM-WM、Transformer-WM、GRU-WM和Mamba-WM约33\%、14\%、23\%和4\%, 标准差最小, 模型稳定性好.
-S4D-WM的参数量仅为0.23M, 在Humanoid和Ant上为所有对比方法中最少, 单样本推理时间8.3ms.
-在Ant数据集上, S4D-WM与Transformer-WM差距仅0.9\%; 在Walker2d上排名第二, 差距10.1\%.
-序列长度敏感性分析揭示了最优序列长度与数据集维度的相关性: 高维Humanoid适合短序列, 低维Ant适合长序列.
-门控阈值函数对比实验表明, 软阈值门控优于硬阈值13.7\%和Garrote阈值24.6\%.
-MPC概念验证实验表明, S4D-WM-MPC的回路时间与Mamba-MPC相近, 两者均受限于梯度反向传播开销;
-若采用采样式MPC结合递推模式的$O(1)$单步延迟, 控制频率有望显著提升.
+具身智能机器人的高维关节状态预测面临精度与实时性的双重挑战. 本文提出基于对角状态空间模型的轻量级世界模型S4D-WM,
+结合S4D参数化与Mamba风格门控结构, 实现$O(T\log T)$训练和$O(1)$单步推理.
+在D4RL基准的Humanoid、Ant和Walker2d三个数据集上的多种子实验表明:
+S4D-WM在高维Humanoid上精度最优, MSE为0.248, 分别优于LSTM、Transformer、GRU和Mamba约33\%、14\%、23\%和4\%;
+在Ant和Walker2d上具有竞争力.
+S4D-WM参数量仅0.23M, 为对比方法中最少, 推理时间8.3ms.
+序列长度分析揭示最优长度与维度相关: 高维Humanoid和Walker2d适合短序列, 低维Ant适合长序列.
+门控阈值实验表明软阈值显著优于硬阈值和Garrote阈值.
+MPC概念验证实验中, S4D-WM与Mamba的回路时间相近, 瓶颈在梯度反向传播; 采样式MPC结合递推模式可进一步提升控制频率.
 
 {\CJKfamily{hei} 关键词:} 状态空间模型; 世界模型; 关节状态预测; 模型预测控制; 具身智能
 
@@ -70,7 +70,7 @@ ZHOU Xin-min$^{1,\,2}$,~~YU Huan-jie$^{3\dagger}$,~~ZHANG Hui-hui$^{4}$,~~WANG W
 \end{center}
 
 \vspace{-10pt}\footnotesize{\textbf{Abstract:}
-This paper proposes S4D-WM, a lightweight world model based on diagonal state space models for robot joint state prediction. On the D4RL Humanoid dataset, S4D-WM achieves the best prediction accuracy with MSE of $24.79{\pm}0.40$ and $R^2$ of $0.690{\pm}0.005$, outperforming LSTM-WM, Transformer-WM, GRU-WM, and Mamba-WM by 33\%, 14\%, 23\%, and 4\% respectively, with the smallest standard deviation. With only 0.23M parameters, S4D-WM has the smallest model size among methods with comparable accuracy on Humanoid, and its 8.3ms per-sample inference time. On Ant, S4D-WM performs comparably to Transformer-WM with only 0.9\% gap; on Walker2d, S4D-WM ranks second with 10.1\% gap. Sequence length sensitivity analysis reveals that optimal sequence length depends on dataset dimensionality. Soft-threshold gating outperforms hard thresholding by 13.7\% and Garrote thresholding by 24.6\%. MPC proof-of-concept experiments show that S4D-WM-MPC has similar loop time to Mamba-MPC, both limited by gradient backward pass; sampling-based MPC combined with S4D-WM's O(1) recursive mode could significantly improve control frequency.
+High-dimensional joint state prediction for embodied intelligent robots faces the dual challenges of accuracy and real-time performance. This paper proposes S4D-WM, a lightweight world model based on diagonal state space models, combining S4D parameterization with Mamba-style gated structure to achieve $O(T\log T)$ training and $O(1)$ per-step inference. Multi-seed experiments on three D4RL benchmarks show that S4D-WM achieves the best accuracy on high-dimensional Humanoid with MSE of 0.248, outperforming LSTM, Transformer, GRU, and Mamba by 33\%, 14\%, 23\%, and 4\% respectively, while remaining competitive on Ant and Walker2d. With only 0.23M parameters, S4D-WM has the smallest model size and 8.3ms inference time. Sequence length analysis reveals that optimal length depends on dimensionality. Soft-threshold gating significantly outperforms hard and Garrote thresholding. MPC proof-of-concept shows similar loop time between S4D-WM and Mamba, bottlenecked by gradient backpropagation; sampling-based MPC with recursive mode could further improve control frequency.
 
 \textbf{Key words:} state space model; world model; joint state prediction; model predictive control; embodied intelligence
 
