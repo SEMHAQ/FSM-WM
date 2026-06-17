@@ -105,12 +105,8 @@ High-dimensional joint state prediction for embodied intelligent robots faces th
 
 状态空间模型(state space model, SSM)\textsuperscript{\cite{6}}作为一种新兴的序列建模方法,
 通过线性递推结构实现了$O(T)$的每步推理复杂度, 在长序列处理上具有天然优势.
-S4\textsuperscript{\cite{6}}通过结构化参数化解决了SSM的长程依赖问题, 在Long Range Arena基准上取得了突破性结果.
-S4D\textsuperscript{\cite{7}}进一步简化了对角SSM的参数化方案, 在保持性能的同时降低了实现复杂度.
-Mamba\textsuperscript{\cite{8}}引入选择性扫描机制, 使SSM能够根据输入内容动态调整状态更新策略,
-在语言建模任务上首次超越了同等规模的Transformer模型.
-Mamba-2\textsuperscript{\cite{9}}进一步揭示了SSM与注意力机制之间的对偶关系,
-为统一理解序列建模方法提供了新的理论视角.
+从S4\textsuperscript{\cite{6}}的结构化参数化到S4D\textsuperscript{\cite{7}}的对角简化,
+再到Mamba\textsuperscript{\cite{8}}的选择性扫描机制, SSM在语言建模等任务上已取得与Transformer相当的性能\textsuperscript{\cite{9}}.
 
 然而, 将SSM应用于具身智能领域的世界模型构建尚处于起步阶段.
 现有工作主要集中在视觉感知和语言理解领域,
