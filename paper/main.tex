@@ -401,12 +401,10 @@ S4D-WM的参数量为$O(D^2L + D(d_s+d_a))$.
 本文采用D4RL基准数据集\textsuperscript{\cite{24}}进行实验, 包含Humanoid-medium(348维, 1163条episode)、Ant-medium(105维, 1047条episode)和Walker2d-medium(17维, 1044条episode)三个子集, 均由MuJoCo物理仿真器生成、TQC策略采集, 按8:2划分训练集和验证集, 输入数据经z-score归一化.
 
 对比方法包括LSTM-WM(4层, 隐层128)、Transformer-WM(2层, 4头, 隐层64, 0.15M参数)、GRU-WM(4层, 隐层128)和Mamba-WM(4层, 隐层128). Transformer-WM采用较小的隐层维度是因为其$O(T^2D)$自注意力复杂度在大维度下计算开销过高; 即便如此, 其参数量(0.15M)仍低于S4D-WM(0.23M), 说明这一比较对Transformer-WM是有利的. 所有实验均使用3个随机种子(42, 123, 456)运行, 报告均值与标准差. 评价指标为MSE、$R^2$、推理时间和参数量:
-\begin{equation}
-\text{MSE} = \frac{1}{N}\sum_{i=1}^{N}\|\hat{{\bm s}}_i - {\bm s}_i\|^2,
-\end{equation}
-\begin{equation}
-R^2 = 1 - \frac{\sum_{i=1}^{N}(\hat{{\bm s}}_i - {\bm s}_i)^2}{\sum_{i=1}^{N}({\bm s}_i - \bar{{\bm s}})^2}
-\end{equation} 所有模型训练100个epoch, 使用AdamW优化器(学习率$5\times10^{-4}$, 余弦退火), 序列长度$T=32$, 批大小64, 随机种子42. 此外, 还测试了不具有时序建模能力的简单基线: 多层感知机MLP(两层隐层, 各128维)和线性回归模型. 这两个基线在Humanoid上的$R^2$为负值(分别为$-$0.17和$-$0.49), 表明其预测不如均值基线, 验证了时序建模对本任务的必要性. 实验在NVIDIA RTX 3090 GPU上进行. MPC实验中因Transformer-WM的$O(T^2)$复杂度在多步展开时推理过慢而未纳入对比.
+\begin{align}
+\text{MSE} &= \frac{1}{N}\sum_{i=1}^{N}\|\hat{{\bm s}}_i - {\bm s}_i\|^2, \\
+R^2 &= 1 - \frac{\sum_{i=1}^{N}(\hat{{\bm s}}_i - {\bm s}_i)^2}{\sum_{i=1}^{N}({\bm s}_i - \bar{{\bm s}})^2}
+\end{align} 所有模型训练100个epoch, 使用AdamW优化器(学习率$5\times10^{-4}$, 余弦退火), 序列长度$T=32$, 批大小64, 随机种子42. 此外, 还测试了不具有时序建模能力的简单基线: 多层感知机MLP(两层隐层, 各128维)和线性回归模型. 这两个基线在Humanoid上的$R^2$为负值(分别为$-$0.17和$-$0.49), 表明其预测不如均值基线, 验证了时序建模对本任务的必要性. 实验在NVIDIA RTX 3090 GPU上进行. MPC实验中因Transformer-WM的$O(T^2)$复杂度在多步展开时推理过慢而未纳入对比.
 
 \subsection{D4RL基准数据集实验}
 
