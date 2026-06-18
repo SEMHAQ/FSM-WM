@@ -393,7 +393,7 @@ S4D-WM的参数量为$O(D^2L + D(d_s+d_a))$.
 
 \section{实验}
 
-\subsection{实验设置}
+\subsection{实验配置}
 
 本文采用D4RL基准数据集\textsuperscript{\cite{24}}进行实验, 包含Humanoid-medium(348维, 1163条episode)、Ant-medium(105维, 1047条episode)和Walker2d-medium(17维, 1044条episode)三个子集, 均由MuJoCo物理仿真器生成、TQC策略采集, 按8:2划分训练集和验证集, 输入数据经z-score归一化.
 
@@ -405,7 +405,7 @@ R^2 &= 1 - \frac{\sum_{i=1}^{N}(\hat{{\bm s}}_i - {\bm s}_i)^2}{\sum_{i=1}^{N}({
 
 \subsection{D4RL基准数据集实验}
 
-在上述实验设置下, 各模型在D4RL Humanoid数据集上的预测性能如表~1所示.
+在上述实验配置下, 各模型在D4RL Humanoid数据集上的预测性能如表~1所示.
 
 \begingroup\centering
 \begin{minipage}{\columnwidth}
