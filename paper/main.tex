@@ -403,7 +403,7 @@ S4D-WM的参数量为$O(D^2L + D(d_s+d_a))$.
 R^2 &= 1 - \frac{\sum_{i=1}^{N}(\hat{{\bm s}}_i - {\bm s}_i)^2}{\sum_{i=1}^{N}({\bm s}_i - \bar{{\bm s}})^2}
 \end{align} 所有模型训练100个epoch, 使用AdamW优化器(学习率$5\times10^{-4}$, 余弦退火), 序列长度$T=32$, 批大小64, 随机种子42. 此外, 还测试了不具有时序建模能力的简单基线: 多层感知机MLP(两层隐层, 各128维)和线性回归模型. 这两个基线在Humanoid上的$R^2$为负值(分别为$-$0.17和$-$0.49), 表明其预测不如均值基线, 验证了时序建模对本任务的必要性. 实验在NVIDIA RTX 3090 GPU上进行.
 
-\subsection{D4RL基准数据集实验}
+\subsection{D4RL基准实验与性能分析}
 
 在上述实验配置下, 各模型在D4RL Humanoid数据集上的预测性能如表~1所示.
 
@@ -449,8 +449,6 @@ Mamba & $-$1.05 & $-$3.78 & 0.06 & * \\\bottomrule
 \par\endgroup
 \end{minipage}
 
-\subsection{不同批次大小下的推理性能}
-
 为评估模型在实际部署场景下的推理性能,
 在批次大小$B{=}1, 8, 32, 64$下测量了各模型的前向传播时间, 序列长度$T{=}32$, 结果如表~3所示.
 
@@ -486,8 +484,6 @@ S4D-WM和Mamba-WM的推理时间较高, 约8.3--10.5ms, 主要原因是两者均
 Fig.~2~~Inference time comparison under different batch sizes}
 \par\endgroup
 
-\subsection{多步预测精度分析}
-
 MPC需要在每个控制周期内对多步未来状态进行展开预测, 因此多步预测精度与单步精度同样重要.
 为评估各模型在多步自回归展开场景下的预测能力,
 在D4RL Humanoid数据集上以$T=32$为输入窗口, 逐步递推预测$H=1, 4, 8, 16$步后的状态, 结果如表~4所示.
@@ -510,6 +506,66 @@ Table~4~~Multi-step prediction MSE comparison (D4RL Humanoid, $T=32$, $\times10^
 由表~4可知, 随着展开步数增加, 所有模型的预测误差均单调递增, 这是自回归展开中误差累积的典型特征.
 S4D-WM在$H{=}1$时取得最优MSE(0.303), $H{\geq}4$时Mamba-WM略优, 但GRU-WM在$H{=}16$时MSE高达7.015, 性能退化最为严重.
 综合参数效率来看, S4D-WM仅为Mamba-WM的35\%(0.23M vs 0.66M), 在资源受限的嵌入式场景中精度--效率权衡更为合理.
+
+为进一步验证S4D-WM在不同维度动力学系统上的泛化能力,
+在D4RL基准数据集\textsuperscript{\cite{24}}的Ant-medium子集上进行了实验.
+Ant环境为四足机器人, 状态维度为105,
+动作维度为8(关节力矩), 包含1047条episode, 其中837条训练、210条验证, 结果如表~9所示.
+
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~9~~D4RL Ant数据集上的性能对比($T=32$)\\
+Table~9~~Performance comparison on D4RL Ant ($T=32$)}\\
+\label{tab:9} \vskip 3pt
+{\fontsize{8.5pt}{10.6pt}\selectfont
+\begin{tabular}{@{}lcccc@{ }}\toprule
+方法 & MSE$^{\text{c}}$ & $R^2$ & 时间$^{\text{a}}$ & 参数$^{\text{b}}$ \\\midrule
+LSTM & 81.40$\pm$1.26 & 0.050$\pm$0.015 & 2.0 & 0.57 \\
+Trans. & 72.55$\pm$0.64 & 0.153$\pm$0.007 & 3.9 & 0.12 \\
+Mamba & 74.28$\pm$0.26 & 0.133$\pm$0.003 & 8.3 & 0.59 \\
+GRU & 77.76$\pm$1.61 & 0.092$\pm$0.019 & 1.1 & 0.44 \\
+\textbf{S4D-WM} & \textbf{73.20$\pm$0.60} & \textbf{0.145$\pm$0.007} & \textbf{8.8} & \textbf{0.16} \\
+\bottomrule
+\multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$ms($B{=}1$, $T{=}32$); $^{\text{b}}$M; $^{\text{c}}$$\times10^{-2}$; 3 seeds.}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
+
+在Ant数据集上, Transformer-WM的精度最优(MSE=$72.55{\times}10^{-2}$), S4D-WM次之($73.20{\times}10^{-2}$), 两者差距仅0.9\%, 差异不显著($p{=}0.15$).
+与Humanoid(348维)上的显著优势相比, S4D-WM在Ant(105维)上的优势有所减弱,
+这可能是因为中低维数据下Transformer-WM的注意力机制更有效, 而S4D-WM的对角SSM结构更适合高维复杂动力学.
+
+为进一步验证模型在不同维度动力学系统上的表现, 在D4RL Walker2d-medium(17维, 1044条episode, 835条训练、209条验证)上进行了实验, 结果如表~10所示.
+
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~10~~D4RL Walker2d数据集上的性能对比($T=32$)}\\
+Table~10~~Performance comparison on D4RL Walker2d ($T=32$)\\
+\label{tab:10} \vskip 3pt
+{\fontsize{8.5pt}{10.6pt}\selectfont
+\begin{tabular}{@{}lcccc@{ }}\toprule
+方法 & MSE$^{\text{c}}$ & $R^2$ & 时间$^{\text{a}}$ & 参数$^{\text{b}}$ \\\midrule
+LSTM & 3.44$\pm$0.02 & 0.963$\pm$0.001 & 1.3 & 0.55 \\
+Trans. & 2.76$\pm$0.02 & 0.971$\pm$0.001 & 2.7 & 0.11 \\
+GRU & 3.39$\pm$0.05 & 0.964$\pm$0.001 & 1.1 & 0.42 \\
+Mamba & 3.51$\pm$0.03 & 0.963$\pm$0.001 & 4.5 & 0.57 \\
+\textbf{S4D-WM} & \textbf{3.04$\pm$0.07} & \textbf{0.967$\pm$0.001} & \textbf{4.7} & \textbf{0.14} \\
+\bottomrule
+\multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$ms($B{=}1$, $T{=}32$); $^{\text{b}}$M; $^{\text{c}}$$\times10^{-2}$; 3 seeds.}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
+
+在Walker2d数据集上, Transformer-WM的精度最优(MSE=$2.76{\times}10^{-2}$), S4D-WM次之($3.04{\times}10^{-2}$), 两者差距10.1\%. 与Ant数据集类似, S4D-WM在中低维动力学上不具备显著优势, 但其参数效率具有竞争力(0.14M).
+
+综合三个数据集的结果, S4D-WM在高维复杂动力学(Humanoid, 348维)上具有显著优势,
+在中低维动力学(Ant, 105维; Walker2d, 17维)上也具有竞争力, 且参数量(0.14--0.23M)远低于LSTM-WM和Mamba-WM. 这一维度相关的表现模式与SSM的线性递推假设一致: 高维数据的状态转移更复杂, 对角SSM能够更有效地建模; 而中低维数据的动力学相对规则, Transformer的注意力机制同样有效. 各方法多维度性能对比如图~7所示.
+
+\begingroup\centering
+\includegraphics[width=0.95\columnwidth]{figures/radar_comparison.pdf}\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~7~~各方法多维度性能对比(D4RL Humanoid)\\
+Fig.~7~~Multi-dimensional performance comparison on D4RL Humanoid}
+\par\endgroup
 
 \subsection{序列长度敏感性分析}
 
@@ -613,8 +669,6 @@ $\lambda{=}1.0$ & 0.244 & 0.772 & 100\\
 
 从表~7可以看出, 多步损失对单步预测精度影响较小. 各配置MSE均在0.244--0.245范围内, 但对多步展开精度贡献显著: 当$\lambda{=}1.0$时, 多步MSE降至0.772, 相比$\lambda{=}0$的0.794降低2.8\%. 默认配置$\lambda{=}0.5$, $H{=}8$在第90轮即收敛(早停), 而其他配置均需完整100轮训练, 说明该配置下单步与多步损失的平衡促进了更快收敛. 综合考虑收敛速度和多步精度, 选择$\lambda{=}0.5$, $H{=}8$作为默认配置.
 
-\subsection{训练过程分析}
-
 图~5展示了各模型在D4RL Humanoid数据集上的训练曲线.
 S4D-WM的训练MSE在前5个epoch快速下降(从$37.2{\times}10^{-2}$降至$24.7{\times}10^{-2}$, 降幅34\%),
 随后放缓并最终收敛至$8.4{\times}10^{-2}$.
@@ -664,69 +718,9 @@ GRU-MPC(1265ms/0.8Hz)、S4D-WM-MPC和Mamba-MPC的回路时间相近, 约1300ms/0
 Fig.~6~~MPC control performance comparison}
 \par\endgroup
 
-\subsection{泛化能力与阈值函数分析}
 
 
-
-为进一步验证S4D-WM在不同维度动力学系统上的泛化能力,
-在D4RL基准数据集\textsuperscript{\cite{24}}的Ant-medium子集上进行了实验.
-Ant环境为四足机器人, 状态维度为105,
-动作维度为8(关节力矩), 包含1047条episode, 其中837条训练、210条验证, 结果如表~9所示.
-
-\noindent\begin{minipage}{\columnwidth}
-\begingroup\centering
-{\CJKfamily{kai} 表~9~~D4RL Ant数据集上的性能对比($T=32$)\\
-Table~9~~Performance comparison on D4RL Ant ($T=32$)}\\
-\label{tab:9} \vskip 3pt
-{\fontsize{8.5pt}{10.6pt}\selectfont
-\begin{tabular}{@{}lcccc@{ }}\toprule
-方法 & MSE$^{\text{c}}$ & $R^2$ & 时间$^{\text{a}}$ & 参数$^{\text{b}}$ \\\midrule
-LSTM & 81.40$\pm$1.26 & 0.050$\pm$0.015 & 2.0 & 0.57 \\
-Trans. & 72.55$\pm$0.64 & 0.153$\pm$0.007 & 3.9 & 0.12 \\
-Mamba & 74.28$\pm$0.26 & 0.133$\pm$0.003 & 8.3 & 0.59 \\
-GRU & 77.76$\pm$1.61 & 0.092$\pm$0.019 & 1.1 & 0.44 \\
-\textbf{S4D-WM} & \textbf{73.20$\pm$0.60} & \textbf{0.145$\pm$0.007} & \textbf{8.8} & \textbf{0.16} \\
-\bottomrule
-\multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$ms($B{=}1$, $T{=}32$); $^{\text{b}}$M; $^{\text{c}}$$\times10^{-2}$; 3 seeds.}
-\end{tabular}}
-\par\endgroup
-\end{minipage}
-
-在Ant数据集上, Transformer-WM的精度最优(MSE=$72.55{\times}10^{-2}$), S4D-WM次之($73.20{\times}10^{-2}$), 两者差距仅0.9\%, 差异不显著($p{=}0.15$).
-与Humanoid(348维)上的显著优势相比, S4D-WM在Ant(105维)上的优势有所减弱,
-这可能是因为中低维数据下Transformer-WM的注意力机制更有效, 而S4D-WM的对角SSM结构更适合高维复杂动力学.
-
-为进一步验证模型在不同维度动力学系统上的表现, 在D4RL Walker2d-medium(17维, 1044条episode, 835条训练、209条验证)上进行了实验, 结果如表~10所示.
-
-\noindent\begin{minipage}{\columnwidth}
-\begingroup\centering
-{\CJKfamily{kai} 表~10~~D4RL Walker2d数据集上的性能对比($T=32$)}\\
-Table~10~~Performance comparison on D4RL Walker2d ($T=32$)\\
-\label{tab:10} \vskip 3pt
-{\fontsize{8.5pt}{10.6pt}\selectfont
-\begin{tabular}{@{}lcccc@{ }}\toprule
-方法 & MSE$^{\text{c}}$ & $R^2$ & 时间$^{\text{a}}$ & 参数$^{\text{b}}$ \\\midrule
-LSTM & 3.44$\pm$0.02 & 0.963$\pm$0.001 & 1.3 & 0.55 \\
-Trans. & 2.76$\pm$0.02 & 0.971$\pm$0.001 & 2.7 & 0.11 \\
-GRU & 3.39$\pm$0.05 & 0.964$\pm$0.001 & 1.1 & 0.42 \\
-Mamba & 3.51$\pm$0.03 & 0.963$\pm$0.001 & 4.5 & 0.57 \\
-\textbf{S4D-WM} & \textbf{3.04$\pm$0.07} & \textbf{0.967$\pm$0.001} & \textbf{4.7} & \textbf{0.14} \\
-\bottomrule
-\multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$ms($B{=}1$, $T{=}32$); $^{\text{b}}$M; $^{\text{c}}$$\times10^{-2}$; 3 seeds.}
-\end{tabular}}
-\par\endgroup
-\end{minipage}
-
-在Walker2d数据集上, Transformer-WM的精度最优(MSE=$2.76{\times}10^{-2}$), S4D-WM次之($3.04{\times}10^{-2}$), 两者差距10.1\%. 与Ant数据集类似, S4D-WM在中低维动力学上不具备显著优势, 但其参数效率具有竞争力(0.14M).
-
-综合三个数据集的结果, S4D-WM在高维复杂动力学(Humanoid, 348维)上具有显著优势,
-在中低维动力学(Ant, 105维; Walker2d, 17维)上也具有竞争力, 且参数量(0.14--0.23M)远低于LSTM-WM和Mamba-WM. 这一维度相关的表现模式与SSM的线性递推假设一致: 高维数据的状态转移更复杂, 对角SSM能够更有效地建模; 而中低维数据的动力学相对规则, Transformer的注意力机制同样有效. 各方法多维度性能对比如图~7所示.
-
-\begingroup\centering
-\includegraphics[width=0.95\columnwidth]{figures/radar_comparison.pdf}\\
-{\fontsize{8.5pt}{10.6pt}\selectfont 图~7~~各方法多维度性能对比(D4RL Humanoid)\\
-Fig.~7~~Multi-dimensional performance comparison on D4RL Humanoid}
-\par\endgroup
+\subsection{阈值函数对比}
 
 为验证不同阈值函数对门控机制的影响, 在D4RL Humanoid数据集上进行了对比实验, 结果如表~11所示.
 
@@ -857,7 +851,7 @@ S4D-WM实现了$O(T\log T)$的计算复杂度和$O(1)$的单步推理延迟.
 \noindent
 {\CJKfamily{kai} 作者简介:}\\
  {\scriptsize
-\indent \textbf{周新民}~~~~博士, 教授, 博士生导师, CCF杰出会员, 主要从事智慧交通、商务智能与大数据、AI大模型等方面的研究. E-mail: \mbox{zhouxinmin2699@163.com};\\
+\indent \textbf{周新民}~~~~博士, 教授, 博士生导师, CCF杰出会员, 主要从事具身智能、智能数据、AI大模型等方面的研究. E-mail: \mbox{zhouxinmin2699@163.com};\\
 \indent \textbf{余焕杰}~~~~硕士研究生, CCF学生会员, 主要从事AI大模型、计算机视觉等方面的研究. E-mail: \mbox{semhaqx@gmail.com};\\
 \indent \textbf{张慧慧}~~~~硕士研究生, CCF学生会员, 主要从事智慧交通、数据分析等方面的研究. E-mail: \mbox{huihuiz054@gmail.com};\\
 \indent \textbf{王~~~~伟}~~~~硕士研究生, CCF学生会员, 主要从事多智能体协同决策、智能体隐私保护等方面的研究. E-mail: \mbox{1819698361@qq.com};\\
