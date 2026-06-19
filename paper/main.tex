@@ -42,7 +42,7 @@ S4D-WM在高维Humanoid上精度最优, MSE为0.248, 分别优于LSTM、Transfor
 在Ant和Walker2d上同样具有竞争力.
 序列长度分析揭示最优长度与维度相关: Humanoid和Walker2d适合短序列, Ant适合长序列.
 门控阈值实验表明软阈值显著优于硬阈值和Garrote阈值.
-MPC概念验证实验中, S4D-WM与Mamba的回路时间相近, 瓶颈在梯度反向传播; 采样式MPC结合递推模式可进一步提升控制频率.
+基于梯度的MPC概念验证表明S4D-WM具备世界模型的基本功能, 但当前0.8Hz的控制频率尚不满足实时需求; 采样式MPC(如CEM、MPPI)结合递推模式的$O(1)$单步延迟有望突破这一瓶颈.
 
 {\CJKfamily{hei} 关键词:} 状态空间模型; 世界模型; 关节状态预测; 模型预测控制; 具身智能
 
@@ -443,8 +443,8 @@ Table~2~~Paired $t$-test results between S4D-WM and baselines (D4RL Humanoid, $T
 LSTM & $-$12.20 & $-$43.18 & $<$0.001 & *** \\
 Trans. & $-$4.02 & $-$10.95 & $<$0.01 & ** \\
 GRU & $-$7.36 & $-$16.14 & $<$0.01 & ** \\
-Mamba & $-$1.05 & $-$3.78 & 0.06 & * \\\bottomrule
-\multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $\Delta$MSE单位为$\times10^{-2}$; 自由度$df{=}2$; ***$p{<}0.001$, **$p{<}0.01$, *$p{<}0.10$.}
+Mamba & $-$1.05 & $-$3.78 & 0.06 & \\\bottomrule
+\multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $\Delta$MSE单位为$\times10^{-2}$; 自由度$df{=}2$; ***$p{<}0.001$, **$p{<}0.01$; Mamba对比$p{=}0.06$未达显著水平.}
 \end{tabular}}
 \par\endgroup
 \end{minipage}
@@ -506,6 +506,7 @@ Table~4~~Multi-step prediction MSE comparison (D4RL Humanoid, $T=32$, $\times10^
 由表~4可知, 随着展开步数增加, 所有模型的预测误差均单调递增, 这是自回归展开中误差累积的典型特征.
 S4D-WM在$H{=}1$时取得最优MSE(0.303), $H{\geq}4$时Mamba-WM略优, 但GRU-WM在$H{=}16$时MSE高达7.015, 性能退化最为严重.
 综合参数效率来看, S4D-WM仅为Mamba-WM的35\%(0.23M vs 0.66M), 在资源受限的嵌入式场景中精度--效率权衡更为合理.
+$H{\geq}4$时Mamba-WM的优势可能源于其选择性扫描机制能够根据输入内容动态调整状态转移, 从而在多步自回归展开中更有效地抑制误差累积, 而S4D-WM的固定对角SSM在长程展开中缺乏这种输入自适应能力.
 
 为进一步验证S4D-WM在不同维度动力学系统上的泛化能力,
 在D4RL基准数据集\textsuperscript{\cite{24}}的Ant-medium子集上进行了实验.
