@@ -607,7 +607,7 @@ Mamba & 1.47$\pm$0.01 & 0.985$\pm$0.001 \\
 \par\endgroup
 \end{minipage}
 
-在Hopper(11维)上, Transformer-WM精度最优(MSE=$1.30{\times}10^{-2}$), S4D-WM次之($1.33{\times}10^{-2}$), Mamba-WM最差($1.47{\times}10^{-2}$). 这一结果进一步支持了维度相关性的趋势: 在低维任务中Transformer和S4D均优于Mamba.
+在Hopper(11维)上, Transformer-WM精度最优(MSE=$1.30{\times}10^{-2}$), S4D-WM次之($1.33{\times}10^{-2}$), Mamba-WM最差($1.47{\times}10^{-2}$), 如图~3b所示. 这一结果进一步支持了维度相关性的趋势: 在低维任务中Transformer和S4D均优于Mamba.
 
 综合四个数据集的结果, S4D-WM在高维复杂动力学(Humanoid, 348维)上与Mamba-WM并列最优, 以更少参数(0.23M vs 0.66M)达到同等精度;
 在中低维动力学(Ant 105维, Walker2d 17维, Hopper 11维)上Transformer-WM精度更优且参数量也更低(0.11--0.15M), 表明注意力机制在中低维任务中同样具有竞争力. 各方法多维度性能对比如图~3所示.
@@ -616,6 +616,12 @@ Mamba & 1.47$\pm$0.01 & 0.985$\pm$0.001 \\
 \includegraphics[width=0.95\columnwidth]{figures/radar_comparison.pdf}\\
 {\fontsize{8.5pt}{10.6pt}\selectfont 图~3~~各方法多维度性能对比(D4RL Humanoid)\\
 Fig.~3~~Multi-dimensional performance comparison on D4RL Humanoid}
+\par\endgroup
+
+\begingroup\centering
+\includegraphics[width=0.95\columnwidth]{figures/hopper_comparison.pdf}\\
+{\fontsize{8.5pt}{10.6pt}\selectfont 图~3b~~D4RL Hopper数据集性能对比(11维)\\
+Fig.~3b~~Performance comparison on D4RL Hopper (11D)}
 \par\endgroup
 
 \subsection{序列长度敏感性分析}
