@@ -524,19 +524,19 @@ S4D-WM & 27.13$\pm$0.35 & 0.661$\pm$0.004 & 4.43 & 0.23 \\
 为评估模型在实际部署场景下的推理性能,
 测量了各模型的前向传播时间, 序列长度$T{=}32$, 结果如表~3所示.
 
-\begin{table}[h]
+\begin{table}[!htbp]
 \centering
 {\CJKfamily{kai} 表~3~~各模型推理时间对比($T=32$, 单位: ms)}\\
 Table~3~~Inference time comparison ($T=32$, unit: ms)}\\
 \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
-\begin{tabular}{lcccccc}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}}lcccccc@{}}
 \toprule
 模型 & LSTM & GRU & Trans. & Mamba & S4D-WM & \textbf{MS-WM} \\
 \midrule
 推理时间 & 2.52 & 1.81 & 9.65 & 4.55 & 4.43 & \textbf{2.16} \\
 \bottomrule
-\end{tabular}}
+\end{tabular*}}
 \end{table}
 
 从表~3可以看出, MS-WM的推理时间最短(2.16ms), 优于GRU-WM(1.81ms)和LSTM-WM(2.52ms), 显著快于Transformer-WM(9.65ms). 这表明多尺度融合架构在保持高精度的同时, 实现了高效的推理性能.
