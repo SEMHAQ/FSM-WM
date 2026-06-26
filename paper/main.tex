@@ -750,7 +750,7 @@ S4D-WM & 7973 & 0.1\\
 表~10表明, 基于梯度的MPC因反向传播开销导致控制频率普遍偏低(0.2--0.8Hz), 远低于典型MPC控制需求(10Hz). 其中S4D-WM和Mamba-WM的回路时间约5.8s, 瓶颈在于卷积模式下50次反向传播的计算开销.
 这一结果表明, 基于梯度的优化方法不适用于SSM类世界模型的实时MPC控制, 需要探索仅需前向传播的替代方案.
 
-为解决上述问题, 实现了基于交叉熵方法(cross-entropy method, CEM)\textsuperscript{\cite{30}}的采样式MPC.
+为解决上述问题, 实现了基于交叉熵方法(cross-entropy method, CEM)的采样式MPC.
 与基于梯度的Adam优化器不同, CEM仅需前向传播评估候选动作序列, 无需反向传播梯度, 天然适合GPU并行计算.
 具体而言, CEM-MPC在每个控制步对$K{=}200$个候选动作序列进行GPU批量前向展开评估(预测时域$H{=}10$), 选取$n{=}30$个精英样本更新采样分布, 经2轮迭代后输出最优动作序列.
 实验结果如表~10所示.
@@ -950,8 +950,6 @@ MPC概念验证实验表明GPU批量并行CEM采样式MPC可将MS-WM的控制频
 \bibitem{28}TODOROV E, EREZ T, TASSA Y. MuJoCo: A physics engine for model-based control. {\it IEEE/RSJ International Conference on Intelligent Robots and Systems}, 2012: 5026--5033.
 
 \bibitem{29}BROCKMAN G, CHEUNG V, PETTERSSON L, et al. OpenAI Gym. {\it arXiv preprint arXiv:1606.01540}, 2016.
-
-\bibitem{30}WILLIAMS G, ALDIGER A, PANDYA R, et al. Information theoretic MPC for model-based reinforcement learning. {\it IEEE International Conference on Robotics and Automation}, 2017: 1714--1721.
 
 \end{thebibliography}}
 
