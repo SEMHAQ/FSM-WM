@@ -592,9 +592,9 @@ S4D-WM & 2.88$\pm$0.02 & 0.969$\pm$0.001 \\
 \par\endgroup
 \end{minipage}
 
-在Walker2d数据集，17维数据集上, Transformer-WM取得了最优精度, MSE为$2.80\times10^{-2}$, S4D-WM次之为$2.88\times10^{-2}$, MS-WM为$3.75\times10^{-2}$表现不如传统方法, 结果如表~5所示. 这表明对于低维简单动力学系统, 多尺度建模的优势不明显, 传统方法已足够.
+在Walker2d数据集上, Transformer-WM取得了最优精度, MSE为$2.80\times10^{-2}$, S4D-WM次之为$2.88\times10^{-2}$, MS-WM为$3.75\times10^{-2}$表现不如传统方法, 结果如表~5所示. 这表明对于低维简单动力学系统, 多尺度建模的优势不明显, 传统方法已足够.
 
-综合四个数据集的结果, MS-WM在高维复杂动力学Humanoid数据集，348维上取得最优精度, MSE为$21.00\times10^{-2}$, 比Transformer-WM提升18.8\%; 在中维Ant数据集，105维上也优于所有基线; 但在低维Walker2d数据集，17维上不如传统方法. 这表明多尺度建模对高维复杂动力学更有效, 而对于低维简单系统, 传统方法已足够.
+综合四个数据集的结果, MS-WM在高维Humanoid上取得最优精度, MSE为$21.00\times10^{-2}$, 比Transformer-WM提升18.8\%; 在中维Ant上也优于所有基线; 但在低维Walker2d上不如传统方法. 这表明多尺度建模对高维复杂动力学更有效, 而对于低维简单系统, 传统方法已足够.
 
 \begingroup\centering
 \includegraphics[width=0.95\columnwidth]{figures/radar_comparison.pdf}\\
