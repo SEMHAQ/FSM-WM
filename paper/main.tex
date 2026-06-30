@@ -562,7 +562,7 @@ R^2 &= 1 - \frac{\sum_{i=1}^{N}(\hat{{\bm s}}_i - {\bm s}_i)^2}{\sum_{i=1}^{N}({
 
 \subsection{基准实验与性能分析}
 
-MIMO-WM的超参搜索结果如表~12所示. 在上述实验配置下, 各模型在Humanoid数据集上的预测性能如表~2所示.
+在上述实验配置下, 各模型在Humanoid数据集上的预测性能如表~2所示.
 
 \begingroup\centering
 \begin{minipage}{\columnwidth}
@@ -650,12 +650,12 @@ Fig.~2~~Multi-dimensional performance comparison on Humanoid dataset}
 \subsection{序列长度敏感性分析}
 
 为分析序列长度对MIMO-WM预测精度的影响,
-在$T{=}16/32/64/128/256$下在Humanoid数据集上进行了实验, 结果如表~6所示.
+在$T{=}16/32/64/128/256$下在Humanoid数据集上进行了实验, 结果如表~5所示.
 
 \begingroup\centering
 \begin{minipage}{\columnwidth}
 \centering
-{\CJKfamily{kai} 表~6~~MIMO-WM在不同序列长度下的预测精度($B{=}64$)\\
+{\CJKfamily{kai} 表~5~~MIMO-WM在不同序列长度下的预测精度($B{=}64$)\\
 Table~6~~Prediction accuracy of MIMO-WM under different sequence lengths ($B{=}64$)}\\
 \vskip 3pt
 {\fontsize{8pt}{10pt}\selectfont
@@ -674,7 +674,7 @@ $T$ & MSE & $R^2$ \\
 \end{minipage}
 \par\endgroup
 
-表~6揭示了序列长度对预测精度的影响.
+表~5揭示了序列长度对预测精度的影响.
 Humanoid数据集在$T{=}16$时取得最优MSE和$R^2$, 随$T$增大而快速退化, $T{=}128$时$R^2$已降为负值($-0.623$), $T{=}256$时进一步降至$-1.694$.
 这表明对于高维人形机器人, 较短的序列长度更有利于预测, 推荐$T \in [16, 32]$.
 
@@ -687,11 +687,11 @@ Fig.~3~~Sequence length sensitivity}
 \subsection{消融实验}
 
 为验证MIMO-WM各组件和关键超参数(层数$L$、隐空间维度$D$)的贡献,
-在Humanoid数据集上以$T=32$的默认设置下逐一移除或调整各组件, 结果如表~7所示.
+在Humanoid数据集上以$T=32$的默认设置下逐一移除或调整各组件, 结果如表~6所示.
 
 \noindent\begin{minipage}{\columnwidth}
 \begingroup\centering
-{\CJKfamily{kai} 表~7~~Humanoid消融实验($T=32$)}\\
+{\CJKfamily{kai} 表~6~~Humanoid消融实验($T=32$)}\\
 Table~7~~Ablation study on Humanoid ($T=32$)\\
 \label{tab:7} \vskip 3pt
 {\fontsize{7.5pt}{9.5pt}\selectfont
@@ -711,7 +711,7 @@ $L=3$ & 21.41$\pm$0.31 & 0.730 & 0.098\\
 \par\endgroup
 \end{minipage}
 
-表~7的消融结果表明, 隐空间维度$D$对性能影响最大: $D=64$时MSE增加25.6\%(从20.82增至21.57), $D=256$时MSE降低13.8\%(降至19.94)但参数量增加2.2倍(0.189M). 层数$L$和状态维度$N$的影响相对较小: $L=2$时MSE仅增加2.2\%, $L=6$和$N=32$与默认配置相当. 综合考虑精度、参数量和推理速度, 默认配置($L=4$, $N=16$, $D=128$)是一个较好的平衡点. 需要说明的是, 表~7中MIMO-WM默认配置的MSE(20.82)与表~1中的MSE(21.00)存在差异, 这是因为两组实验在不同随机种子下独立运行, 且表~7报告的是单步预测损失$\mathcal{L}_{\text{s}}$, 而表~1报告的是综合MSE指标. 消融实验中各配置均在同一随机种子下对比, 因此相对趋势具有参考价值. 消融结果可视化如图~4所示.
+表~6的消融结果表明, 隐空间维度$D$对性能影响最大: $D=64$时MSE增加25.6\%(从20.82增至21.57), $D=256$时MSE降低13.8\%(降至19.94)但参数量增加2.2倍(0.189M). 层数$L$和状态维度$N$的影响相对较小: $L=2$时MSE仅增加2.2\%, $L=6$和$N=32$与默认配置相当. 综合考虑精度、参数量和推理速度, 默认配置($L=4$, $N=16$, $D=128$)是一个较好的平衡点. 需要说明的是, 表~6中MIMO-WM默认配置的MSE(20.82)与表~2中的MSE(19.87)存在差异, 这是因为两组实验在不同随机种子下独立运行, 且表~6报告的是单步预测损失$\mathcal{L}_{\text{s}}$, 而表~2报告的是综合MSE指标. 消融实验中各配置均在同一随机种子下对比, 因此相对趋势具有参考价值. 消融结果可视化如图~4所示.
 
 \begingroup\centering
 \includegraphics[width=0.95\columnwidth]{figures/ablation_results.pdf}\\
@@ -719,11 +719,11 @@ $L=3$ & 21.41$\pm$0.31 & 0.730 & 0.098\\
 Fig.~4~~Ablation study results visualization}
 \par\endgroup
 
-为进一步验证多步展开损失的有效性, 对损失权重$\lambda$和展开步数$H$进行了消融实验, 结果如表~8所示.
+为进一步验证多步展开损失的有效性, 对损失权重$\lambda$和展开步数$H$进行了消融实验, 结果如表~7所示.
 
 \noindent\begin{minipage}{\columnwidth}
 \begingroup\centering
-{\CJKfamily{kai} 表~8~~训练损失消融结果(Humanoid, $T=32$)}\\
+{\CJKfamily{kai} 表~7~~训练损失消融结果(Humanoid, $T=32$)}\\
 Table~8~~Training loss ablation (Humanoid, $T=32$)\\
 \label{tab:8} \vskip 3pt
 {\fontsize{8pt}{10pt}\selectfont
@@ -742,7 +742,7 @@ $\lambda{=}1.0$ & 21.30 & 983.9 & 66\\
 \par\endgroup
 \end{minipage}
 
-从表~8可以看出, 多步损失对单步预测精度影响较小. 各配置MSE均在0.244--0.245范围内, 但对多步展开精度贡献显著: 当$\lambda{=}1.0$时, 多步MSE降至0.772, 相比$\lambda{=}0$的0.794降低2.8\%. 默认配置$\lambda{=}0.5$, $H{=}8$在第90轮即收敛(早停), 而其他配置均需完整100轮训练, 说明该配置下单步与多步损失的平衡促进了更快收敛. 综合考虑收敛速度和多步精度, 选择$\lambda{=}0.5$, $H{=}8$作为默认配置. 需要说明的是, 表~8中的验证集MSE(0.244)与表~1中的综合MSE(21.00)存在差异, 这是因为表~8报告的是仅含单步损失$\mathcal{L}_{\text{s}}$的验证集MSE, 而表~1报告的是包含多步展开损失$\mathcal{L}_{\text{m}}$的综合评估指标, 且两者使用的随机种子不同.
+从表~7可以看出, 多步损失对单步预测精度影响较小. 各配置MSE均在0.244--0.245范围内, 但对多步展开精度贡献显著: 当$\lambda{=}1.0$时, 多步MSE降至0.772, 相比$\lambda{=}0$的0.794降低2.8\%. 默认配置$\lambda{=}0.5$, $H{=}8$在第90轮即收敛(早停), 而其他配置均需完整100轮训练, 说明该配置下单步与多步损失的平衡促进了更快收敛. 综合考虑收敛速度和多步精度, 选择$\lambda{=}0.5$, $H{=}8$作为默认配置. 需要说明的是, 表~7中的验证集MSE(0.244)与表~2中的综合MSE(19.87)存在差异, 这是因为表~7报告的是仅含单步损失$\mathcal{L}_{\text{s}}$的验证集MSE, 而表~2报告的是包含多步展开损失$\mathcal{L}_{\text{m}}$的综合评估指标, 且两者使用的随机种子不同.
 
 图~6展示了各模型在Humanoid数据集上的训练曲线.
 所有模型的训练MSE在前10个epoch快速下降, 随后趋于平稳, 在第15个epoch后基本收敛.
@@ -759,11 +759,11 @@ Fig.~5~~Training curves of all models on Humanoid}
 
 为探索S4D-WM在MPC框架中的可行性, 设计了以下轨迹跟踪概念验证实验.
 给定一条目标参考轨迹${\bm s}_{\text{ref}}(t)$, 使用MPC控制器驱动机器人跟踪该轨迹.
-MPC的预测时域$H=10$, 使用Adam优化器进行50次梯度下降迭代, 结果如表~9所示. Transformer-WM因自注意力的$O(T^2)$复杂度在多步展开时推理过慢而未纳入MPC对比.
+MPC的预测时域$H=10$, 使用Adam优化器进行50次梯度下降迭代, 结果如表~8所示. Transformer-WM因自注意力的$O(T^2)$复杂度在多步展开时推理过慢而未纳入MPC对比.
 
 \noindent\begin{minipage}{\columnwidth}
 \begingroup\centering
-{\CJKfamily{kai} 表~9~~基于梯度的MPC控制性能(Humanoid)}\\
+{\CJKfamily{kai} 表~8~~基于梯度的MPC控制性能(Humanoid)}\\
 Table~9~~MPC control performance comparison (Humanoid)\\
 \label{tab:9} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
@@ -781,18 +781,18 @@ S4D & 1683.9 & 0.6\\
 \par\endgroup
 \end{minipage}
 
-表~9表明, 基于梯度的MPC因反向传播开销导致控制频率普遍偏低(0.2--0.8Hz), 远低于典型MPC控制需求(10Hz). 其中S4D-WM和Mamba-WM的回路时间约5.8s, 瓶颈在于卷积模式下50次反向传播的计算开销.
+表~8表明, 基于梯度的MPC因反向传播开销导致控制频率普遍偏低(0.2--0.8Hz), 远低于典型MPC控制需求(10Hz). 其中S4D-WM和Mamba-WM的回路时间约5.8s, 瓶颈在于卷积模式下50次反向传播的计算开销.
 这一结果表明, 基于梯度的优化方法不适用于SSM类世界模型的实时MPC控制, 需要探索仅需前向传播的替代方案.
 
 为解决上述问题, 实现了基于交叉熵方法(cross-entropy method, CEM)的采样式MPC.
 与基于梯度的Adam优化器不同, CEM仅需前向传播评估候选动作序列, 无需反向传播梯度, 天然适合GPU并行计算.
 具体而言, CEM-MPC在每个控制步对$K{=}200$个候选动作序列进行GPU批量前向展开评估(预测时域$H{=}10$), 选取$n{=}30$个精英样本更新采样分布, 经2轮迭代后输出最优动作序列.
-实验结果如表~10所示.
+实验结果如表~9所示.
 
 \begingroup\centering
 \begin{minipage}{\columnwidth}
 \centering
-{\CJKfamily{kai} 表~10~~CEM采样式MPC控制性能(Humanoid)\\
+{\CJKfamily{kai} 表~9~~CEM采样式MPC控制性能(Humanoid)\\
 Table~10~~CEM sampling-based MPC control performance (Humanoid)}\\
 \label{tab:10} \vskip 3pt
 {\fontsize{8.5pt}{10.6pt}\selectfont
@@ -809,7 +809,7 @@ S4D & 111.3 & 9.0 \\
 \end{minipage}
 \par\endgroup
 
-表~10表明, CEM-MPC相比梯度MPC(表~9)可将控制频率提升1--2个数量级.
+表~9表明, CEM-MPC相比梯度MPC(表~8)可将控制频率提升1--2个数量级.
 MIMO-WM达到21.7Hz, 显著优于所有基线, 满足典型MPC控制需求(10Hz);
 GRU-WM达到19.5Hz, S4D-WM达到11.3Hz, 也满足10Hz需求;
 Transformer-WM仅6.2Hz, 不满足实时控制需求.
@@ -822,48 +822,6 @@ Fig.~6~~MPC control performance comparison}
 \par\endgroup
 
 
-
-\subsection{阈值函数对比}
-
-为验证不同阈值函数对门控机制的影响, 在Humanoid数据集上进行了对比实验, 结果如表~11所示.
-
-\noindent\begin{minipage}{\columnwidth}
-\begingroup\centering
-{\CJKfamily{kai} 表~11~~不同阈值函数的门控机制对比(Humanoid, $T=32$)}\\
-Table~11~~Gating mechanism comparison with different threshold functions (Humanoid, $T=32$)\\
-\label{tab:11} \vskip 3pt
-{\fontsize{8pt}{10pt}\selectfont
-\begin{tabular}{@{}lcc@{ }}\toprule
-阈值函数 & MSE$(\times10^{-2})$ & $R^2$ \\
-\midrule
-硬阈值 & 24.84$\pm$3.37 & 0.689\\
-Garrote阈值 & 21.99$\pm$0.57 & 0.725\\
-{\CJKfamily{zhhei}\textbf{软阈值}} & \textbf{20.82$\pm$0.12} & \textbf{0.741}\\
-\bottomrule
-\multicolumn{3}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: 5 seeds.}
-\end{tabular}}
-\par\endgroup
-\end{minipage}
-
-从表~11可以看出, 软阈值门控的MSE(0.272)优于硬阈值(0.300, 降低9.3\%)和Garrote阈值(0.279, 降低2.5\%), 且标准差最小(0.002), 表现最为稳定.
-硬阈值的不可微性导致梯度截断, 影响训练效率且结果完全无波动(标准差为0); Garrote阈值虽可微但其非单调性导致梯度方向不稳定.
-
-\noindent\begin{minipage}{\columnwidth}
-\centering
-{\CJKfamily{kai} 表~12~~MIMO-WM训练超参网格搜索结果(Humanoid, $T=32$)\\
-Table~12~~Hyperparameter grid search results for MIMO-WM (Humanoid, $T=32$)}\\
-\vskip 3pt
-{\fontsize{8pt}{10pt}\selectfont
-\begin{tabular}{@{}lccc@{ }}\toprule
-$D$ & MSE$(\times10^{-2})$ & $R^2$ & 参数$^{\text{a}}$(M) \\\midrule
-64 & 21.68$\pm$0.19 & 0.727 & 0.055 \\
-96 & 20.74$\pm$0.15 & 0.740 & 0.085 \\
-\textbf{128} & \textbf{20.51$\pm$0.34} & \textbf{0.741} & \textbf{0.118} \\
-192 & 20.11$\pm$0.20 & 0.751 & 0.189 \\
-\bottomrule
-\multicolumn{4}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$M; 5 seeds; 默认$N$=8, $L$=1, $W$=5.}
-\end{tabular}}
-\end{minipage}
 
 \subsection{讨论}
 
