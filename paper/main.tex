@@ -374,8 +374,8 @@ ${\bm h}_t^{(d)} \in \mathbb{C}^N$为第$d$维的隐状态.
 \begin{Ste}解码: $\hat{{\bm s}}_T \leftarrow {\bm s}_{T{-}1} + \text{Decoder}({\bm z}_{T{-}1})$.\end{Ste}
 
 \subsection{理论分析}
-
-本节分析MIMO-SSM（即D通道并行对角SSM）的理论性质.
+    
+本节分析MIMO-SSM的理论性质.
 MIMO-SSM为每个输入维度$d=1,\ldots,D$分配一个独立的$N$维对角SSM,
 其参数为$({\bm A}^{(d)}, {\bm B}^{(d)}, {\bm C}^{(d)})$,
 其中${\bm A}^{(d)} = \diag(a_1^{(d)}, \ldots, a_N^{(d)}) \in \mathbb{C}^{N \times N}$.
@@ -484,7 +484,9 @@ MPC在每个时刻求解$\min_{\|{\bm a}\|_\infty \leqslant a_{\max}} J({\bm a})
 设代价函数$J({\bm a})$在有界闭集$\mathcal{A} \subset \mathbb{R}^{Hd_a}$上连续可微,
 且存在Lipschitz常数$L_J > 0$使得$\|\nabla J({\bm a})\| \leqslant L_J$对任意${\bm a} \in \mathcal{A}$成立.
 进一步假设$J$在全局最优解${\bm a}^*$附近满足$\mu$-强凸性, 即
-$J({\bm a}) \geqslant J({\bm a}^*) + \frac{\mu}{2}\|{\bm a} - {\bm a}^*\|^2$.
+\begin{equation}
+J({\bm a}) \geqslant J({\bm a}^*) + \frac{\mu}{2}\|{\bm a} - {\bm a}^*\|^2.
+\end{equation}
 \end{Sup}
 
 \begin{Thm}
@@ -495,15 +497,21 @@ $J({\bm a}) \geqslant J({\bm a}^*) + \frac{\mu}{2}\|{\bm a} - {\bm a}^*\|^2$.
 $\mathbb{E}[J({\bm a}_{\text{best}}^{(k)})] \leqslant \mathbb{E}[J({\bm a}_{\text{best}}^{(k-1)})]$.
 
 收敛速率: 期望代价以指数速率收敛到全局最优,
-$\mathbb{E}[J({\bm a}_{\text{best}}^{(k)})] - J^*
-\leqslant \frac{\mu}{2}\|\Sigma^{(0)}\|_F^2 \exp\big(-\frac{N_e}{K}k\big)$.
+\begin{equation}
+\mathbb{E}[J({\bm a}_{\text{best}}^{(k)})] - J^*
+\leqslant \frac{\mu}{2}\|\Sigma^{(0)}\|_F^2 \exp\big(-\frac{N_e}{K}k\big).
+\end{equation}
 
 分布收敛: 采样分布$\mathcal{N}({\bm \mu}^{(k)}, {\bm \Sigma}^{(k)})$弱收敛到退化分布$\delta_{{\bm a}^*}$.
 \end{Thm}
 
 {\CJKfamily{hei}证}~~
 先证明方差缩减性质. 设第$k$轮采样集$\mathcal{S}^{(k)}$含$K$个独立同分布样本,
-其全样本方差估计为${\bm \Sigma}_{\mathcal{S}}^{(k)} = \frac{1}{K-1}\sum_{{\bm a} \in \mathcal{S}^{(k)}}({\bm a} - \bar{{\bm \mu}})({\bm a} - \bar{{\bm \mu}})^{\rm T}$.
+其全样本方差估计为
+\begin{equation}
+{\bm \Sigma}_{\mathcal{S}}^{(k)} = \frac{1}{K-1}\sum_{{\bm a} \in \mathcal{S}^{(k)}}
+({\bm a} - \bar{{\bm \mu}})({\bm a} - \bar{{\bm \mu}})^{\rm T}.
+\end{equation}
 精英集$E^{(k)} \subset \mathcal{S}^{(k)}$包含代价最小的$N_e$个样本,
 其方差${\bm \Sigma}^{(k+1)}$是全样本方差的子集估计,
 Frobenius范数以概率$1-N_e/K$缩减.
@@ -513,7 +521,10 @@ Frobenius范数以概率$1-N_e/K$缩减.
 
 由$\mu$-强凸性, $J({\bm a}) \geqslant J^* + \frac{\mu}{2}\|{\bm a} - {\bm a}^*\|^2$.
 设$\|{\bm \Sigma}^{(0)}\|_F^2 = \sigma_0^2$, 由方差递推得
-$\|{\bm \Sigma}^{(k)}\|_F^2 \leqslant \sigma_0^2 (1 - \frac{N_e}{K})^{2k} \leqslant \sigma_0^2 \exp(-2\frac{N_e}{K}k)$,
+\begin{equation}
+\|{\bm \Sigma}^{(k)}\|_F^2 \leqslant \sigma_0^2 \Big(1 - \frac{N_e}{K}\Big)^{2k}
+\leqslant \sigma_0^2 \exp\Big(-2\frac{N_e}{K}k\Big),
+\end{equation}
 代入强凸不等式取期望即得指数收敛速率.
 
 由于${\bm \Sigma}^{(k)} \to {\bm 0}$, ${\bm \mu}^{(k)} \to {\bm a}^*$,
