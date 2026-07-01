@@ -705,6 +705,31 @@ $N{=}8$ & 18.77$\pm$0.22 & 0.765$\pm$0.003 & 0.200\\
 Fig.~4~~Ablation study results visualization}
 \par\endgroup
 
+\subsection{序列长度敏感性分析}
+
+为分析序列长度对MIMO-WM预测精度的影响, 在Humanoid数据集上测试了不同序列长度$T$下的性能, 结果如表~4所示.
+
+\noindent\begin{minipage}{\columnwidth}
+\begingroup\centering
+{\CJKfamily{kai} 表~4~~MIMO-WM在不同序列长度下的预测精度\\
+Table~4~~Prediction accuracy of MIMO-WM under different sequence lengths}\\
+\vskip 3pt
+{\fontsize{8.5pt}{10.6pt}\selectfont
+\begin{tabular}{@{}lcc@{}}\toprule
+$T$ & MSE$(\times10^{-2})$ & $R^2$ \\
+\midrule
+8  & 20.14$\pm$0.13 & 0.765 \\
+16 & \textbf{19.23$\pm$0.14} & \textbf{0.764} \\
+32 & 21.18$\pm$0.04 & 0.735 \\
+64 & 21.28$\pm$0.16 & 0.708 \\
+128 & 41.13$\pm$0.36 & 0.448 \\
+\bottomrule
+\multicolumn{3}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: 3 seeds; Humanoid数据集.}
+\end{tabular}}
+\par\endgroup
+\end{minipage}
+
+表~4表明, MIMO-WM在$T{=}16$时取得最优精度, MSE为19.23. 当$T$增至32及以上时, 精度逐步下降, $T{=}128$时MSE增至41.13, R²降至0.448. 这表明对于Humanoid高维动力学系统, 较短的序列长度更有利于预测, 推荐$T \in [8, 32]$.
 
 \subsection{讨论}
 
