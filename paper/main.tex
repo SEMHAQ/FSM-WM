@@ -437,8 +437,7 @@ $\bar{{\bm A}}$为对角, 故$\bar{{\bm A}}^{t-\tau} = \diag(\bar{a}_n^{t-\tau})
 \begin{eqnarray}
 {\bm C}\bar{{\bm A}}^{t-\tau}\bar{{\bm B}} = \sum_n C_n\bar{a}_n^{t-\tau}\bar{b}_n = K[t{-}\tau].
 \end{eqnarray}
-因此$y_t = \sum_{\tau=0}^{t} K[t{-}\tau]x_\tau + {\bm D}x_t$, 与卷积模式一致. \hfill$\square$
-
+因此$y_t = \sum_{\tau=0}^{t} K[t{-}\tau]x_\tau + {\bm D}x_t$, 与卷积模式一致.
 \begin{Thm}
 \label{thm:complexity}
 设输入长度$T$, 隐状态$N$, 隐空间$D$, 层数$L$,
@@ -458,8 +457,7 @@ MIMO-WM在长序列下更优.
 卷积$O(T\log T)$, 空间$O(T)$. (2) 编码$O(TD(d_s+d_a))$,
 每MIMO块$O(TD\log T+TD^2)$, $L$层$O(LTD\log T+LTD^2)$,
 解码$O(TDd_s)$. (3) LSTM每步$4$组$O(D^2)$运算,
-Transformer自注意力$O(T^2D)$. 本文$T=32$, $D=96$, 约6倍加速. \hfill$\square$
-
+Transformer自注意力$O(T^2D)$. 本文$T=32$, $D=96$, 约6倍加速.
 
 \begin{Def}
 \label{def:cem_cost}
@@ -490,8 +488,7 @@ $\|{\bm \Sigma}^{(k+1)}\|_F \leqslant (1 - \frac{N_e}{K})\|{\bm \Sigma}^{(k)}\|_
 {\bm \Sigma}_{\mathcal{S}}^{(k)} = \frac{1}{K-1}\sum_{{\bm a} \in \mathcal{S}^{(k)}}
 ({\bm a} - \bar{{\bm \mu}})({\bm a} - \bar{{\bm \mu}})^{\rm T}.
 \end{eqnarray}
-精英方差是其子集估计, 以概率$1-N_e/K$缩减. \hfill$\square$
-
+精英方差是其子集估计, 以概率$1-N_e/K$缩减.
 \begin{Thm}
 \label{thm:cem}
 在假设~\ref{sup:cost}下:
@@ -508,8 +505,7 @@ $\|{\bm \Sigma}^{(k+1)}\|_F \leqslant (1 - \frac{N_e}{K})\|{\bm \Sigma}^{(k)}\|_
 (1) 由引理, 精英方差递减, 采样集中, 代价单调非增.
 (2) 由强凸性和方差递推得指数收敛.
 (3) ${\bm \Sigma}^{(k)} \to {\bm 0}$, ${\bm \mu}^{(k)} \to {\bm a}^*$,
-故弱收敛到$\delta_{{\bm a}^*}$. \hfill$\square$
-
+故弱收敛到$\delta_{{\bm a}^*}$.
 
 \begin{Cor}
 \label{cor:gate}
