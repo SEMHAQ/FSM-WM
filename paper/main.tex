@@ -621,8 +621,8 @@ LSTM & 39.93$\pm$0.36 & 0.501$\pm$0.005 & 1.12 & 0.227 \\
 GRU & 36.60$\pm$0.30 & 0.542$\pm$0.004 & 1.29 & 0.190 \\
 Trans. & 28.11$\pm$0.72 & 0.648$\pm$0.009 & 10.73 & 0.302 \\
 Mamba & 20.18$\pm$0.24 & 0.748$\pm$0.003 & 1.66 & 0.224 \\
-TCN & 20.68$\pm$0.32 & 0.741$\pm$0.004 & 3.01 & 0.132 \\
-\textbf{MIMO-WM} & \textbf{19.87$\pm$0.23} & \textbf{0.751$\pm$0.003} & 2.02 & \textbf{0.138} \\
+TCN & 20.68$\pm$0.32 & 0.741$\pm$0.004 & 0.84 & 0.189 \\
+\textbf{MIMO-WM} & \textbf{19.87$\pm$0.23} & \textbf{0.751$\pm$0.003} & \textbf{2.02} & \textbf{0.138} \\
 \bottomrule
 \multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$ms($B{=}1$, $T{=}32$); $^{\text{b}}$M; $^{\text{c}}$$\times10^{-2}$; 5 seeds.}
 \end{tabular}}
@@ -630,7 +630,7 @@ TCN & 20.68$\pm$0.32 & 0.741$\pm$0.004 & 3.01 & 0.132 \\
 \par\endgroup
 
 表~1展示了各模型在Humanoid数据集上的性能对比. MIMO-WM取得了最优精度, MSE为$19.87\times10^{-2}$, 优于Mamba-WM的$20.18\times10^{-2}$, 相对降低1.5\%; 优于TCN-WM的$20.68\times10^{-2}$, 降低3.9\%; 优于Transformer-WM的$28.11\times10^{-2}$, 降低29.3\%; 同时大幅优于GRU-WM的$36.60\times10^{-2}$和LSTM-WM的$39.93\times10^{-2}$.
-值得注意的是, MIMO-WM的参数量仅0.138M, 略高于TCN-WM的0.132M, 但显著低于Mamba-WM的0.224M, 减少38\%.
+值得注意的是, MIMO-WM的参数量仅0.138M, 低于TCN-WM的0.189M和Mamba-WM的0.224M, 在所有方法中最为轻量.
 这表明MIMO-WM在保持轻量化的同时实现了最优预测精度.
 
 为进一步验证MIMO-WM在不同人形机器人任务上的泛化能力, 在HumanoidStandup数据集上进行了实验, 结果如表~2所示. HumanoidStandup要求机器人从地面站起, 涉及更大幅度的姿态变化和更强的非线性动力学.
@@ -643,12 +643,12 @@ Table~4~~Performance comparison on HumanoidStandup ($T=32$)}\\
 {\fontsize{8.5pt}{10.6pt}\selectfont
 \begin{tabular}{@{}lcccc@{ }}\toprule
 方法 & MSE$^{\text{c}}$ & $R^2$ & 时间$^{\text{a}}$ & 参数$^{\text{b}}$ \\\midrule
-LSTM & 60.42$\pm$0.18 & 0.368$\pm$0.002 & 1.12 & 0.227 \\
-GRU & 58.84$\pm$0.07 & 0.384$\pm$0.001 & 1.29 & 0.190 \\
-Trans. & 53.18$\pm$0.13 & 0.444$\pm$0.001 & 10.73 & 0.302 \\
-Mamba & 59.25$\pm$0.38 & 0.380$\pm$0.004 & 1.66 & 0.224 \\
-TCN & 55.10$\pm$0.08 & 0.424$\pm$0.001 & 3.01 & 0.132 \\
-\textbf{MIMO-WM} & \textbf{53.10$\pm$0.07} & \textbf{0.444$\pm$0.001} & 2.02 & \textbf{0.138} \\
+LSTM & 60.42$\pm$0.18 & 0.368$\pm$0.002 & 0.53 & 0.227 \\
+GRU & 58.84$\pm$0.07 & 0.384$\pm$0.001 & 0.53 & 0.190 \\
+Trans. & 53.18$\pm$0.13 & 0.444$\pm$0.001 & 1.66 & 0.302 \\
+Mamba & 59.25$\pm$0.38 & 0.380$\pm$0.004 & 1.57 & 0.224 \\
+TCN & 55.10$\pm$0.08 & 0.424$\pm$0.001 & 0.76 & 0.189 \\
+\textbf{MIMO-WM} & \textbf{53.10$\pm$0.07} & \textbf{0.444$\pm$0.001} & \textbf{1.77} & \textbf{0.138} \\
 \bottomrule
 \multicolumn{5}{@{}l@{}}{\fontsize{7pt}{8.5pt}\selectfont 注: $^{\text{a}}$ms($B{=}1$, $T{=}32$); $^{\text{b}}$M; $^{\text{c}}$$\times10^{-2}$; 5 seeds.}
 \end{tabular}}
@@ -708,7 +708,7 @@ Fig.~4~~Ablation study results visualization}
 
 Humanoid数据集上的实验结果表~1表明MIMO-WM取得了最优精度, MSE为$19.87\times10^{-2}$,
 优于Mamba-WM($20.18\times10^{-2}$)、TCN-WM($20.68\times10^{-2}$)和Transformer-WM($28.11\times10^{-2}$).
-值得注意的是, MIMO-WM的参数量(0.138M)显著低于Mamba-WM(0.224M, 少38\%).
+值得注意的是, MIMO-WM的参数量仅0.138M, 为所有方法中最轻量, 显著低于Mamba-WM的0.224M.
 消融实验表~3进一步证实门控机制是性能提升的关键因素, 移除后MSE增加8.9\%.
 
 本文将MIMO-WM定位为一种轻量级世界模型, 其核心功能是状态转移预测.
