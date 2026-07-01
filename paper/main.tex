@@ -317,10 +317,12 @@ Fig.~1~~Overall architecture of MIMO-WM}
 \subsection{编码器与解码器}
 
 编码器将当前状态和动作拼接后投影到隐空间:
-\begin{eqnarray}
-{\bm z}_t' &=& {\bm W}_1[{\bm s}_t; {\bm a}_t] + {\bm b}_1, \\
-{\bm z}_t &=& {\bm W}_2\text{GELU}\textsuperscript{\cite{26}}({\bm z}_t') + {\bm b}_2,
-\end{eqnarray}
+\begin{equation}
+\left\{\begin{aligned}
+{\bm z}_t' &= {\bm W}_1[{\bm s}_t; {\bm a}_t] + {\bm b}_1, \\
+{\bm z}_t &= {\bm W}_2\text{GELU}\textsuperscript{\cite{26}}({\bm z}_t') + {\bm b}_2.
+\end{aligned}\right.
+\end{equation}
 其中GELU为高斯误差线性单元.
 其中${\bm W}_1 \in \mathbb{R}^{D \times (d_s + d_a)}$, ${\bm W}_2 \in \mathbb{R}^{D \times D}$,
 $D$为隐空间维度. 解码器将最后一层输出映射回状态空间:
@@ -344,11 +346,13 @@ ${\bm h}_t^{(d)} \in \mathbb{C}^N$为第$d$维的隐状态.
 所有维度参数独立, 可捕获不同类型的动力学特征.
 
 \textbf{门控融合}: 先层归一化, 再经SSM变换和sigmoid门控
-\begin{eqnarray}
-\tilde{{\bm z}}_t &=& \text{LayerNorm}({\bm z}_t), \\
-{\bm h}_t &=& \text{DiagSSM}(\tilde{{\bm z}}_t), \\
-{\bm o}_t &=& {\bm h}_t \odot \sigma({\bm W}_g\tilde{{\bm z}}_t + {\bm b}_g),
-\end{eqnarray}
+\begin{equation}
+\left\{\begin{aligned}
+\tilde{{\bm z}}_t &= \text{LayerNorm}({\bm z}_t), \\
+{\bm h}_t &= \text{DiagSSM}(\tilde{{\bm z}}_t), \\
+{\bm o}_t &= {\bm h}_t \odot \sigma({\bm W}_g\tilde{{\bm z}}_t + {\bm b}_g).
+\end{aligned}\right.
+\end{equation}
 其中$\sigma$为sigmoid函数, ${\bm W}_g \in \mathbb{R}^{D \times D}$.
 门控输出经残差连接${\bm z}_t' = {\bm z}_t + {\bm W}_o{\bm o}_t + {\bm b}_o$,
 其中${\bm W}_o \in \mathbb{R}^{D \times D}$.
@@ -370,19 +374,23 @@ ${\bm h}_t^{(d)} \in \mathbb{C}^N$为第$d$维的隐状态.
 首先考虑对角SSM的稳定性. 设${\bm h}(t) \in \mathbb{C}^N$为隐状态,
 $x(t) \in \mathbb{R}$, $y(t) \in \mathbb{R}$分别为输入和输出,
 对角SSM定义为
-\begin{eqnarray}
-\dot{{\bm h}}(t) &=& {\bm A}{\bm h}(t) + {\bm B}x(t), \\
-y(t) &=& {\bm C}{\bm h}(t) + {\bm D}x(t),
-\end{eqnarray}
+\begin{equation}
+\left\{\begin{aligned}
+\dot{{\bm h}}(t) &= {\bm A}{\bm h}(t) + {\bm B}x(t), \\
+y(t) &= {\bm C}{\bm h}(t) + {\bm D}x(t).
+\end{aligned}\right.
+\end{equation}
 其中${\bm A} = \diag(a_1, \ldots, a_N) \in \mathbb{C}^{N \times N}$,
 $a_n = -\alpha_n + j\beta_n$为极点,
 $\alpha_n > 0$确保系统渐近稳定.
 
 经零阶保持离散化后, 系统变为
-\begin{eqnarray}
-{\bm h}_k &=& \bar{{\bm A}}{\bm h}_{k-1} + \bar{{\bm B}}x_k, \\
-y_k &=& {\bm C}{\bm h}_k + {\bm D}x_k,
-\end{eqnarray}
+\begin{equation}
+\left\{\begin{aligned}
+{\bm h}_k &= \bar{{\bm A}}{\bm h}_{k-1} + \bar{{\bm B}}x_k, \\
+y_k &= {\bm C}{\bm h}_k + {\bm D}x_k.
+\end{aligned}\right.
+\end{equation}
 其中$\bar{{\bm A}} = \diag(\bar{a}_1, \ldots, \bar{a}_N)$,
 $\bar{a}_n = \exp(\Delta a_n)$, $\bar{b}_n = (\exp(\Delta a_n)-1)/a_n$.
 由于$\alpha_n > 0$, $|\bar{a}_n| = \exp(-\Delta\alpha_n) < 1$, 离散系统保持稳定.
@@ -451,9 +459,6 @@ MIMO-WM在长序列下更优.
 解码$O(TDd_s)$. (3) LSTM每步$4$组$O(D^2)$运算,
 Transformer自注意力$O(T^2D)$. 本文$T=32$, $D=96$, 约6倍加速. \hfill$\square$
 
-\begin{Rem}{\fontsize{9.3pt}{11.6pt}\selectfont
-递推模式适合低延迟单步预测, 卷积模式适合批量训练.
-MIMO-WM可在两种模式间动态切换.}\end{Rem}
 
 \begin{Def}
 \label{def:cem_cost}
@@ -506,9 +511,6 @@ $J({\bm a}) \geqslant J^* + \frac{\mu}{2}\|{\bm a} - {\bm a}^*\|^2$.
 (3) ${\bm \Sigma}^{(k)} \to {\bm 0}$, ${\bm \mu}^{(k)} \to {\bm a}^*$,
 故弱收敛到$\delta_{{\bm a}^*}$. \hfill$\square$
 
-\begin{Rem}{\fontsize{9.3pt}{11.6pt}\selectfont
-本文$K{=}256$, $N_e{=}32$, 方差每轮缩减$1{-}32/256{=}0.875$,
-$M{=}5$轮后缩小至$0.875^5{\approx}0.51$.}\end{Rem}
 
 \begin{Cor}
 \label{cor:gate}
@@ -524,11 +526,13 @@ $M{=}5$轮后缩小至$0.875^5{\approx}0.51$.}\end{Rem}
 \subsection{训练目标}
 
 训练损失函数包含单步预测损失和多步展开损失:
-\begin{eqnarray}
-&&\mathcal{L}_{\text{s}} = \frac{1}{T}\sum_{t=0}^{T-1}\|{\bm s}_{t+1} - \hat{{\bm s}}_{t+1}\|^2, \\
-&&\mathcal{L}_{\text{m}} = \frac{1}{H}\sum_{h=1}^{H}\|{\bm s}_{T+h} - \hat{{\bm s}}_{T+h}\|^2, \\
-&&\mathcal{L} = \mathcal{L}_{\text{s}} + \lambda \mathcal{L}_{\text{m}},
-\end{eqnarray}
+\begin{equation}
+\left\{\begin{aligned}
+\mathcal{L}_{\text{s}} &= \frac{1}{T}\sum_{t=0}^{T-1}\|{\bm s}_{t+1} - \hat{{\bm s}}_{t+1}\|^2, \\
+\mathcal{L}_{\text{m}} &= \frac{1}{H}\sum_{h=1}^{H}\|{\bm s}_{T+h} - \hat{{\bm s}}_{T+h}\|^2, \\
+\mathcal{L} &= \mathcal{L}_{\text{s}} + \lambda \mathcal{L}_{\text{m}}.
+\end{aligned}\right.
+\end{equation}
 其中$\lambda$为多步损失权重, $H$为展开步数.
 单步损失确保模型在每个时间步的预测准确性,
 多步损失则鼓励模型在自回归展开时保持预测稳定性.
